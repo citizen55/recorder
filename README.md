@@ -1,8 +1,8 @@
 # Audio recorder
 
-# EN
+### EN
 
-# RU
+### RU
 
 Используется:
  - библиотека lamejs https://github.com/zhuker/lamejs;
@@ -13,6 +13,7 @@
 
 
 HTML разметка
+```html
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
     ...
 <body>
@@ -30,3 +31,4 @@ HTML разметка
     </div>
     <script src="dist/bandle.js"></script>
 </body>
+```
