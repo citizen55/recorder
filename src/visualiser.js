@@ -5,12 +5,18 @@ export default class Visualiser{
 
         this.audioCtx = new (window.AudioContext || webkitAudioContext)();
 
+        let webRecorder = document.getElementById('webrecorder');
+        let row = document.createElement('div');
+        row.classList.add('row');
+        webRecorder.insertAdjacentElement("afterbegin", row);
+
         this.canvas = document.createElement('canvas');
-        this.canvas.width = width || 300;
+        this.canvas.width = width || 250;
         this.canvas.height = height || 70;
         this.canvas.setAttribute('id', 'canvas');
         this.canvas.setAttribute('style', 'border-bottom: 1px solid black; border-top: 2px solid darkgray;');
-        document.getElementById('webrecorder').insertAdjacentElement('afterbegin', this.canvas);
+        this.canvas.classList.add('mx-auto');
+        row.insertAdjacentElement('afterbegin', this.canvas);
         this.canvasCtx = this.canvas.getContext('2d');
 
         this.peakFactor = this.canvas.height / 140;

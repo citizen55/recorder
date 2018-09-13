@@ -1,5 +1,6 @@
 import lamejs from 'lamejs';
 import Worker from './mp3.worker';
+import {DOMHelper} from './utils';
 
 console.dir(Worker);
 
@@ -143,30 +144,32 @@ export default class RecorderMp3 {
     }
 
     showResultToUser(){
-        let row = document.createElement('div');
-        row.classList.add('row');
-        let col = document.createElement('div');
-        col.classList.add('col-12', 'pt-4');
-
-        row.appendChild(col);
-        this.audioContainer.appendChild(row);
-
         let audio = document.createElement('audio');
         audio.setAttribute('controls', '');
         audio.controls = true;
-
-        col.appendChild(audio);
 
         let blob = new Blob(this.mp3Data, {'type' : 'audio/mp3'});
         this.mp3Data = [];
         let audioUrl = window.URL.createObjectURL(blob);
         audio.src = audioUrl;
 
+        DOMHelper.createWrap(this.audioContainer, audio, ['pt-3', 'mx-auto']);
+
         let link = document.createElement('a');
         link.innerHTML = 'download';
 
         link.href = audioUrl;
+        link.innerHTML = 'Download';
+        link.classList.add('btn', 'btn-primary', 'btn-sm');
         link.download = 'file.mp3';
-        col.appendChild(link);
+;
+        let btnEdit = document.createElement('button');
+        btnEdit.innerHTML = 'Edit';
+        btnEdit.classList.add('btn', 'btn-primary', 'btn-sm', 'ml-1');
+        btnEdit.setAttribute('id', 'edit');
+        btnEdit.setAttribute('type', 'button');
+
+        DOMHelper.createWrap(this.audioContainer, [link, btnEdit], ['mx-auto']);
+
     }
 }

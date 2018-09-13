@@ -1,4 +1,3 @@
-import Recorder from './recorder';
 import RecorderMp3 from './recordermp3';
 import getUserMediaPolyfill from './getUserMediaPolyfill';
 import Visualiser from './visualiser';
