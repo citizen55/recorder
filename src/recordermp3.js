@@ -5,12 +5,13 @@ import {DOMHelper} from './utils';
 console.dir(Worker);
 
 export default class RecorderMp3 {
-    constructor(stream){
+    constructor(stream, parent, width){
         this.stream = stream;
+        this.width = width;
         this.init();
-        this.prepareUI();
-        this.mp3Data = [];
+        this.prepareUI(parent);
 
+        this.mp3Data = [];
         this.mp3Encoder = new lamejs.Mp3Encoder(1, 44100, 128);
         this.sampleBlockSize = 1152;
         this.flagPause = false;
@@ -108,23 +109,34 @@ export default class RecorderMp3 {
 
     }
 
-    prepareUI(){
-        this.btnRecord = document.getElementById('record');
-        this.btnPause = document.getElementById('pause');
-        this.btnResume = document.getElementById('resume');
-        this.btnStop = document.getElementById('stop');
-        
+    prepareUI(parent){
+        this.webRecoder = parent;
 
+        this.btnRecord = DOMHelper.createButton('Record', ['btn', 'btn-danger', 'btn-sm']);
         this.btnRecord.addEventListener('click', this.record.bind(this));
+
+        this.btnPause = DOMHelper.createButton('Pause', ['btn', 'btn-primary', 'btn-sm']);
         this.btnPause.addEventListener('click', this.pause.bind(this));
+
+        this.btnResume = DOMHelper.createButton('Resume', ['btn', 'btn-primary', 'btn-sm']);
         this.btnResume.addEventListener('click', this.resume.bind(this));
+
+        this.btnStop = DOMHelper.createButton('Stop', ['btn', 'btn-danger', 'btn-sm']);
         this.btnStop.addEventListener('click', this.stop.bind(this));
+
+        let col = document.createElement('div');
+        col.classList.add('mx-auto');
+        col.setAttribute('style', 'width:' + this.width + 'px;');
+        col.appendChild(this.btnRecord);
+        col.appendChild(this.btnPause);
+        col.appendChild(this.btnResume);
+        col.appendChild(this.btnStop);
+
+        DOMHelper.createWrap(this.webRecoder, col, {cssCol: ['col-12'], cssRow: ['row', 'pt-4']});
 
         this.btnPause.disabled = true;
         this.btnResume.disabled = true;
         this.btnStop.disabled = true;
-
-        this.webRecoder = document.getElementById('webrecorder');
 
         let row = document.createElement('div');
         row.classList.add('row');
@@ -135,6 +147,8 @@ export default class RecorderMp3 {
 
         row.appendChild(this.audioContainer);
         this.webRecoder.appendChild(row);
+
+        return true;
     }
 
     processingResponseOnStop(mp3Data){
@@ -153,7 +167,13 @@ export default class RecorderMp3 {
         let audioUrl = window.URL.createObjectURL(blob);
         audio.src = audioUrl;
 
-        DOMHelper.createWrap(this.audioContainer, audio, ['pt-3', 'mx-auto']);
+        DOMHelper.createWrap(this.audioContainer, audio, {
+            cssCol: ['pt-3', 'mx-auto'],
+            cssRow: ['row'],
+            attrCol: {
+                'style': 'width:' + this.width + 'px;'
+            }
+        });
 
         let link = document.createElement('a');
         link.innerHTML = 'download';
@@ -169,7 +189,15 @@ export default class RecorderMp3 {
         btnEdit.setAttribute('id', 'edit');
         btnEdit.setAttribute('type', 'button');
 
-        DOMHelper.createWrap(this.audioContainer, [link, btnEdit], ['mx-auto']);
+        DOMHelper.createWrap(this.audioContainer, [link, btnEdit],
+            {
+                cssCol: ['mx-auto'],
+                cssRow: ['row'],
+                attrCol: {
+                    'style': 'width:' + this.width + 'px;'
+                }
+            }
+        );
 
     }
 }

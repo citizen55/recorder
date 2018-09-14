@@ -1,20 +1,43 @@
 
 // create a wrapeer from DOM Elements with classes Bootstrap 4
 let DOMHelper = {
-    createWrap: function (parent, childs, cssClasses) {
+    createWrap: function (parent, childs, prop) {
 
         let row = document.createElement('div');
-        row.classList.add('row');
         let col = document.createElement('div');
 
-        if(cssClasses instanceof Array){
-            for(let item = 0; item < cssClasses.length; item++){
-                col.classList.add(cssClasses[item]);
+
+        if(prop instanceof Object){
+            if(prop.cssCol != undefined){
+
+                for(let item = 0; item < prop.cssCol.length; item++){
+                    col.classList.add(prop.cssCol[item]);
+                }
+            }
+            if(prop.cssRow != undefined){
+                for(let item = 0; item < prop.cssRow.length; item++){
+                    row.classList.add(prop.cssRow[item]);
+                }
+            }
+            if(prop.attrCol != undefined){
+                for(let key in prop.attrCol){
+                    col.setAttribute(key, prop.attrCol[key]);
+                }
+            }
+            if(prop.attrRow != undefined){
+                for(let key in prop.attrRow){
+                    row.setAttribute(key, key.value);
+                }
+            }
+
+        }else if(prop instanceof Array){
+            for(let item = 0; item < prop.length; item++){
+                col.classList.add(prop[item]);
             }
         }else{
             col.classList.add('col-12');
+            row.classList.add('row');
         }
-
 
         row.appendChild(col);
         parent.appendChild(row);
@@ -28,6 +51,21 @@ let DOMHelper = {
         }
 
         return true;
+    },
+
+    createButton: function ( name, cssClasses) {
+        let btn = document.createElement('button');
+        if(cssClasses instanceof Array){
+            for(let item = 0; item < cssClasses.length; item++){
+                btn.classList.add(cssClasses[item]);
+            }
+        }else{
+            btn.classList.add('btn');
+        }
+        btn.setAttribute('type', 'button');
+        btn.setAttribute('id', name);
+        btn.innerHTML = name;
+        return btn;
     }
 }
 

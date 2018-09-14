@@ -11,8 +11,8 @@ export default class Visualiser{
         webRecorder.insertAdjacentElement("afterbegin", row);
 
         this.canvas = document.createElement('canvas');
-        this.canvas.width = width || 250;
-        this.canvas.height = height || 70;
+        this.canvas.width = width;
+        this.canvas.height = height;
         this.canvas.setAttribute('id', 'canvas');
         this.canvas.setAttribute('style', 'border-bottom: 1px solid black; border-top: 2px solid darkgray;');
         this.canvas.classList.add('mx-auto');
