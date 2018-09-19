@@ -19,16 +19,24 @@ HTML разметка
 <body>
     <div class="container">
         <section id="webrecorder" class="pt-4">
-            <div class="row pt-4" id="control">
-                <div class="col-12" >
-                    <button class="btn btn-outline-danger"  type="button" id="record">Record</button>
-                    <button class="btn btn-outline-primary" type="button" id="pause">Pause</button>
-                    <button class="btn btn-outline-primary" type="button" id="resume">Resume</button>
-                    <button class="btn btn-outline-danger"  type="button" id="stop">Stop</button>
-                </div>
-            </div>
         </section>
     </div>
     <script src="dist/bandle.js"></script>
+    <script> Recorder.create(
+        {
+            container: 'webrecorder',
+            recorder: {
+              width: 250
+            },
+            visualiser: {
+                show: true,
+                width: 250,
+                height: 70
+            }
+            /*visualiser: {
+                show: false
+            } */
+        }
+    ); </script>
 </body>
 ```

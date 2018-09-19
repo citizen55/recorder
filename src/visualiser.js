@@ -1,8 +1,9 @@
 
 
 export default class Visualiser{
-    constructor(stream, width, height){
+    constructor(stream, settings){
 
+        this.settings = settings;
         this.audioCtx = new (window.AudioContext || webkitAudioContext)();
 
         let webRecorder = document.getElementById('webrecorder');
@@ -11,8 +12,8 @@ export default class Visualiser{
         webRecorder.insertAdjacentElement("afterbegin", row);
 
         this.canvas = document.createElement('canvas');
-        this.canvas.width = width;
-        this.canvas.height = height;
+        this.canvas.width = settings.width;
+        this.canvas.height = settings.height;
         this.canvas.setAttribute('id', 'canvas');
         this.canvas.setAttribute('style', 'border-bottom: 1px solid black; border-top: 2px solid darkgray;');
         this.canvas.classList.add('mx-auto');

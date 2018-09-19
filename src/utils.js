@@ -53,7 +53,7 @@ let DOMHelper = {
         return true;
     },
 
-    createButton: function ( name, cssClasses) {
+    createButton( name, cssClasses) {
         let btn = document.createElement('button');
         if(cssClasses instanceof Array){
             for(let item = 0; item < cssClasses.length; item++){

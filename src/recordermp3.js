@@ -1,15 +1,17 @@
 import lamejs from 'lamejs';
 import Worker from './mp3.worker';
 import {DOMHelper} from './utils';
+import {UI} from './UI';
 
-console.dir(Worker);
 
 export default class RecorderMp3 {
-    constructor(stream, parent, width){
+    constructor(stream, parent, settings){
         this.stream = stream;
-        this.width = width;
+        this.parent = parent;
+        this.settings = settings;
+        this.width = settings.width;
         this.init();
-        this.prepareUI(parent);
+        this.prepareUI();
 
         this.mp3Data = [];
         this.mp3Encoder = new lamejs.Mp3Encoder(1, 44100, 128);
@@ -29,7 +31,7 @@ export default class RecorderMp3 {
                 throw new Error("not created script processor");
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
 
         this.worker = new Worker();
@@ -105,48 +107,20 @@ export default class RecorderMp3 {
         this.btnPause.disabled = false; // on
     }
 
-    destructor(){
+    prepareUI(){
 
-    }
+        Object.assign(this, UI.createControlRecorder(this.parent));
 
-    prepareUI(parent){
-        this.webRecoder = parent;
-
-        this.btnRecord = DOMHelper.createButton('Record', ['btn', 'btn-danger', 'btn-sm']);
-        this.btnRecord.addEventListener('click', this.record.bind(this));
-
-        this.btnPause = DOMHelper.createButton('Pause', ['btn', 'btn-primary', 'btn-sm']);
-        this.btnPause.addEventListener('click', this.pause.bind(this));
-
-        this.btnResume = DOMHelper.createButton('Resume', ['btn', 'btn-primary', 'btn-sm']);
-        this.btnResume.addEventListener('click', this.resume.bind(this));
-
-        this.btnStop = DOMHelper.createButton('Stop', ['btn', 'btn-danger', 'btn-sm']);
-        this.btnStop.addEventListener('click', this.stop.bind(this));
-
-        let col = document.createElement('div');
-        col.classList.add('mx-auto');
-        col.setAttribute('style', 'width:' + this.width + 'px;');
-        col.appendChild(this.btnRecord);
-        col.appendChild(this.btnPause);
-        col.appendChild(this.btnResume);
-        col.appendChild(this.btnStop);
-
-        DOMHelper.createWrap(this.webRecoder, col, {cssCol: ['col-12'], cssRow: ['row', 'pt-4']});
+        this.btnRecord.addEventListener('click',    this.record.bind(this));
+        this.btnPause.addEventListener('click',     this.pause.bind(this));
+        this.btnResume.addEventListener('click',    this.resume.bind(this));
+        this.btnStop.addEventListener('click',      this.stop.bind(this));
 
         this.btnPause.disabled = true;
         this.btnResume.disabled = true;
         this.btnStop.disabled = true;
 
-        let row = document.createElement('div');
-        row.classList.add('row');
-
-        this.audioContainer = document.createElement('div');
-        this.audioContainer.setAttribute('id', 'audiocontainer');
-        this.audioContainer.classList.add('col-12');
-
-        row.appendChild(this.audioContainer);
-        this.webRecoder.appendChild(row);
+        this.receivedAudioContainer = UI.createContainerForReceivedAudio(this.parent);
 
         return true;
     }
@@ -158,46 +132,14 @@ export default class RecorderMp3 {
     }
 
     showResultToUser(){
-        let audio = document.createElement('audio');
-        audio.setAttribute('controls', '');
-        audio.controls = true;
+
+        let {audio, link, btnEdit} = UI.showReceivedAudio(this.receivedAudioContainer, this.width);
 
         let blob = new Blob(this.mp3Data, {'type' : 'audio/mp3'});
         this.mp3Data = [];
         let audioUrl = window.URL.createObjectURL(blob);
         audio.src = audioUrl;
 
-        DOMHelper.createWrap(this.audioContainer, audio, {
-            cssCol: ['pt-3', 'mx-auto'],
-            cssRow: ['row'],
-            attrCol: {
-                'style': 'width:' + this.width + 'px;'
-            }
-        });
-
-        let link = document.createElement('a');
-        link.innerHTML = 'download';
-
         link.href = audioUrl;
-        link.innerHTML = 'Download';
-        link.classList.add('btn', 'btn-primary', 'btn-sm');
-        link.download = 'file.mp3';
-;
-        let btnEdit = document.createElement('button');
-        btnEdit.innerHTML = 'Edit';
-        btnEdit.classList.add('btn', 'btn-primary', 'btn-sm', 'ml-1');
-        btnEdit.setAttribute('id', 'edit');
-        btnEdit.setAttribute('type', 'button');
-
-        DOMHelper.createWrap(this.audioContainer, [link, btnEdit],
-            {
-                cssCol: ['mx-auto'],
-                cssRow: ['row'],
-                attrCol: {
-                    'style': 'width:' + this.width + 'px;'
-                }
-            }
-        );
-
     }
 }

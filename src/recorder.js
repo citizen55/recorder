@@ -21,7 +21,7 @@ export default class Recorder{
         this.btnResume;
         this.btnStop;
 
-        this.audioContainer;
+        this.receivedAudioContainer;
 
         this.init();
     }
@@ -47,11 +47,11 @@ export default class Recorder{
         let row = document.createElement('div');
         row.classList.add('row');
 
-        this.audioContainer = document.createElement('div');
-        this.audioContainer.setAttribute('id', 'audiocontainer');
-        this.audioContainer.classList.add('col-12');
+        this.receivedAudioContainer = document.createElement('div');
+        this.receivedAudioContainer.setAttribute('id', 'audiocontainer');
+        this.receivedAudioContainer.classList.add('col-12');
 
-        row.appendChild(this.audioContainer);
+        row.appendChild(this.receivedAudioContainer);
 
         this.webRecoder.appendChild(row);
 
@@ -109,7 +109,7 @@ export default class Recorder{
         audio.setAttribute('controls', '');
         audio.controls = true;
 
-        this.audioContainer.appendChild(audio);
+        this.receivedAudioContainer.appendChild(audio);
 
         //let blob = new Blob(this.mp3Data, {type: 'audio/mp3'});
         let blob = new Blob(this.audioData, {'type' : 'audio/webm;codecs=opus'});
