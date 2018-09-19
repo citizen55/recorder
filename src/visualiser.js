@@ -1,28 +1,14 @@
-
+import {UI} from './UI';
 
 export default class Visualiser{
-    constructor(stream, settings){
-
+    constructor(stream, container, settings){
         this.settings = settings;
         this.audioCtx = new (window.AudioContext || webkitAudioContext)();
 
-        let webRecorder = document.getElementById('webrecorder');
-        let row = document.createElement('div');
-        row.classList.add('row');
-        webRecorder.insertAdjacentElement("afterbegin", row);
+        let canvas = UI.createVisualiserView(container, settings.width, settings.height);
+        this.canvasCtx = canvas.getContext('2d');
 
-        this.canvas = document.createElement('canvas');
-        this.canvas.width = settings.width;
-        this.canvas.height = settings.height;
-        this.canvas.setAttribute('id', 'canvas');
-        this.canvas.setAttribute('style', 'border-bottom: 1px solid black; border-top: 2px solid darkgray;');
-        this.canvas.classList.add('mx-auto');
-        row.insertAdjacentElement('afterbegin', this.canvas);
-        this.canvasCtx = this.canvas.getContext('2d');
-
-        this.peakFactor = this.canvas.height / 140;
-
-        //this.gain = this.ctx.createGain();
+        this.peakFactor = this.settings.height / 140;
         this.analyserNode = this.audioCtx.createAnalyser();
         //fft - fast Fourier Transform
         this.analyserNode.fftSize = 2048;
@@ -30,10 +16,9 @@ export default class Visualiser{
         //Is an unsigned long value half that of the FFT size.
         // This generally equates to the number of data values
         // you will have to play with for the visualization
-        this.bufferLength = this.analyserNode.frequencyBinCount; // bufferLenght in const but no this.bufferLength
-        console.log(this.bufferLength);
+        this.bufferLength = this.analyserNode.frequencyBinCount;
+
         this.dataArray = new Uint8Array(this.bufferLength);
-        this.frequencyDataArray = new Uint8Array(this.analyserNode.frequencyBinCount);
         //Copies the current waveform, or time-domain,
         // data into a Uint8Array (unsigned byte array) passed into it.
         this.analyserNode.getByteTimeDomainData(this.dataArray);
@@ -85,8 +70,8 @@ export default class Visualiser{
 
     drawFrequency(time){
 
-        const CANVAS_HEIGHT = this.canvas.height;
-        const CANVAS_WIDTH = this.canvas.width;
+        const CANVAS_HEIGHT = this.settings.height;
+        const CANVAS_WIDTH = this.settings.width;
         const CELL_WIDTH = 3;
         const BAR_WIDTH = 1;
 

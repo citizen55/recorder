@@ -1,8 +1,7 @@
-import {DOMHelper} from "./utils";
 
 const UI = {
 
-    createControlRecorder: function(parent) {
+    createControlRecorder: function(parent, width) {
         let btnRecord, btnPause, btnResume, btnStop;
 
         btnRecord =  this.createButton('Start',  ['btn', 'btn-danger', 'btn-sm']);
@@ -12,7 +11,7 @@ const UI = {
 
         let col = document.createElement('div');
         col.classList.add('mx-auto');
-        col.setAttribute('style', 'width:' + this.width + 'px;');
+        col.setAttribute('style', 'width:' + width + 'px;');
         col.appendChild(btnRecord);
         col.appendChild(btnPause);
         col.appendChild(btnResume);
@@ -41,7 +40,7 @@ const UI = {
         return container;
     },
 
-    showReceivedAudio(container, width){
+    showReceivedAudioView(container, width){
         let audio = document.createElement('audio');
         audio.setAttribute('controls', '');
         audio.controls = true;
@@ -76,6 +75,22 @@ const UI = {
         );
 
         return {audio, link, btnEdit};
+    },
+
+    createVisualiserView(container, width, height){
+        let row = document.createElement('div');
+        row.classList.add('row');
+        container.insertAdjacentElement("afterbegin", row);
+
+        let canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.setAttribute('id', 'canvas');
+        canvas.setAttribute('style', 'border-bottom: 1px solid black; border-top: 2px solid darkgray;');
+        canvas.classList.add('mx-auto');
+        row.insertAdjacentElement('afterbegin', canvas);
+
+        return canvas;
     },
 
     createButton( name, cssClasses) {

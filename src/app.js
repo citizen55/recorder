@@ -27,16 +27,16 @@ var Recorder = {
 
         // navigator.getUserMedia(constraints, successCallback, errorCallback);
         navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
-                let recParent = document.getElementById(this.settings.container);
-                if(!recParent){
+                let container = document.getElementById(this.settings.container);
+                if(!container){
                     console.error("Not found record's parent");
                     return;
                 }
                // UI.mainParent = recParent;
-                let recMp3 = new RecorderMp3(stream, recParent, Object.assign({}, this.settings.recorder));
+                let recMp3 = new RecorderMp3(stream, container, Object.assign({}, this.settings.recorder));
 
                 if(this.settings.visualiser.show){
-                    let visualiser = new Visualiser(stream, Object.assign({}, this.settings.visualiser));
+                    let visualiser = new Visualiser(stream, container, Object.assign({}, this.settings.visualiser));
                     visualiser.drawFrequency();
                 }
             }, (err) => {

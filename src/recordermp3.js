@@ -1,6 +1,5 @@
 import lamejs from 'lamejs';
 import Worker from './mp3.worker';
-import {DOMHelper} from './utils';
 import {UI} from './UI';
 
 
@@ -109,7 +108,7 @@ export default class RecorderMp3 {
 
     prepareUI(){
 
-        Object.assign(this, UI.createControlRecorder(this.parent));
+        Object.assign(this, UI.createControlRecorder(this.parent, this.width));
 
         this.btnRecord.addEventListener('click',    this.record.bind(this));
         this.btnPause.addEventListener('click',     this.pause.bind(this));
@@ -133,7 +132,7 @@ export default class RecorderMp3 {
 
     showResultToUser(){
 
-        let {audio, link, btnEdit} = UI.showReceivedAudio(this.receivedAudioContainer, this.width);
+        let {audio, link, btnEdit} = UI.showReceivedAudioView(this.receivedAudioContainer, this.width);
 
         let blob = new Blob(this.mp3Data, {'type' : 'audio/mp3'});
         this.mp3Data = [];
