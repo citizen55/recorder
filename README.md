@@ -1,4 +1,4 @@
-# Audio recorder
+# Web dictophone
 
 ### EN
 
