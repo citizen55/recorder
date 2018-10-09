@@ -1,5 +1,3 @@
-import lamejs from 'lamejs';
-
 export default class Recorder{
     constructor(stream){
 
@@ -13,9 +11,6 @@ export default class Recorder{
         this.mp3Data = [];
         this.samples;
         this.mp3Buf;
-        //can be anything but make it a multiple of 576 to make encoders life easier
-        //sampleBlockSize = 1152;
-
         this.btnRecord;
         this.btnPause;
         this.btnResume;
@@ -103,24 +98,13 @@ export default class Recorder{
      *
      */
     onStopMediaRecorder(e){
-        console.log('onStopMediaRecorder');
-
         let audio = document.createElement('audio');
         audio.setAttribute('controls', '');
         audio.controls = true;
-
         this.receivedAudioContainer.appendChild(audio);
-
-        //let blob = new Blob(this.mp3Data, {type: 'audio/mp3'});
         let blob = new Blob(this.audioData, {'type' : 'audio/webm;codecs=opus'});
-        //'audio/mpeg; codecs="mp3"
-        //console.dir(this.audioData);
         this.audioData = [];
         let audioUrl = window.URL.createObjectURL(blob);
         audio.src = audioUrl;
     }
-
-
-
-
 }
